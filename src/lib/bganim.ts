@@ -54,14 +54,6 @@ function randomBetween(min: number, max: number): number {
     return Math.floor(min + Math.random() * (max - min + 1));
 }
 
-export async function drawEveryPoint(points: Point[], canvasCtx: CanvasRenderingContext2D) {
-    for (let point of points) {
-        canvasCtx.beginPath()
-        canvasCtx.arc(point.x, point.y, 5, 0, 2*Math.PI)
-        canvasCtx.fill()
-    }
-}
-
 export function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -1,24 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { Point, delay, drawEveryPoint } from "$lib/bganim";
-    let canvas: HTMLCanvasElement
+    import { Point, delay} from "$lib/bganim";
+    let points: Point[] = []
+    Point.height = window.innerHeight
+    Point.width = window.innerHeight
 
     onMount(async () => {
-        const canvasCtx = canvas.getContext("2d")!
-
-        canvasCtx.fillStyle = "#000"
-        canvasCtx.fillRect(0, 0, canvas.width, canvas.height)
-
-        let points: Point[] = []
-        for(let i = 0; i < 256; i++) {
-            points.push(new Point())
-        }
+        points = new Array(256).fill(new Point())
 
         for(;;) {
-            canvasCtx.fillStyle = "#000"
-            canvasCtx.fillRect(0, 0, canvas.width, canvas.height)
-            canvasCtx.fillStyle = "#ff8000"
-            drawEveryPoint(points, canvasCtx)
+            for (let point of points) {
+                point.cycle()
+            }
             await delay(16)
         }
     })
@@ -26,7 +19,11 @@
 </script>
 
 <div id="container">
-    <canvas bind:this={canvas}/>
+    <svg id="background" width="{window.innerWidth}" height="{window.innerHeight}">
+        {#each points as point}
+            <circle r="2" cx="{point.x}" cy="{point.y}" fill="orange"/>
+        {/each}
+    </svg>
 </div>
 
 <style>
@@ -38,7 +35,8 @@
         left: 0;
     }
 
-    canvas {
+    #background {
+        background-color: black;
         width: 100%;
         height: 100%;
     }
